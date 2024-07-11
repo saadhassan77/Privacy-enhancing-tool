@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXIF REMOVER</title>
+    <link rel="icon" href="/static/logo.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/static/background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 100px auto; 
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+            text-align: center; 
+        }
+        h1, h2 {
+            color: #007bff; 
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="file"], input[type="text"] {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        input[type="file"]::file-selector-button, input[type="text"]::file-selector-button {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="file"]::file-selector-button:hover, input[type="text"]::file-selector-button:hover {
+            background-color: #0056b3;
+        }
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease; 
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3; 
+        }
+        p.success {
+            background-color: #007bff;
+            color: #ffffff;
+            border-radius: 8px;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+        }
+        pre {
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace; 
+            font-size: 14px; 
+            color: #aaa;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #007bff;
+            color: white;
+            padding: 16px;
+            border-radius: 8px;
+            z-index: 1;
+            display: none;
+            animation: slideIn 0.5s ease-out forwards, fadeOut 0.5s 2.5s forwards;
+        }
+
+        @keyframes slideIn {
+            from { bottom: -100px; opacity: 0; }
+            to { bottom: 20px; opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Privacy Enhancing Tool</h1>
+        
+        <h2>Remove EXIF Metadata</h2>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="remove_exif">
+            <label for="fileToRemove">Select Image File:</label>
+            <input type="file" id="fileToRemove" name="file" accept="image/*">
+            <button type="submit">Remove EXIF Metadata</button>
+        </form>
+        
+        <h2>Remove EXIF Metadata from Folder</h2>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="remove_exif_folder">
+            <label for="folderPath">Folder Path:</label>
+            <input type="text" id="folderPath" name="folder_path" placeholder="Enter folder path">
+            <button type="submit">Remove EXIF Metadata from Folder</button>
+        </form>
+        
+        <h2>Embed File</h2>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="embed">
+            <input type="file" name="file" accept="image/*">
+            <input type="file" name="file_to_embed">
+            <input type="text" name="passphrase" placeholder="Passphrase">
+            <button type="submit">Embed File</button>
+        </form>
+
+        <h2>Extract Embedded File</h2>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="extract">
+            <input type="file" name="file" accept="image/*">
+            <input type="text" name="output_file_extract" placeholder="Output File Name">
+            <input type="text" name="passphrase" placeholder="Passphrase">
+            <button type="submit">Extract Embedded File</button>
+        </form>
+
+        <h2>View Metadata</h2>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="view_metadata">
+            <input type="file" name="file" accept="image/*">
+            <button type="submit">View Metadata</button>
+        </form>
+
+        {% if success_message %}
+            <div class="toast" id="successToast">
+                {{ success_message }}
+            </div>
+        {% endif %}
+
+        {% if metadata %}
+            <h2>Metadata</h2>
+            <pre>{{ metadata }}</pre>
+        {% endif %}
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            const toast = document.getElementById('successToast');
+            if (toast) {
+                toast.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
