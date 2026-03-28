@@ -28,5 +28,5 @@ A Python-based web tool to enhance image privacy by removing EXIF metadata and e
    http://127.0.0.1:5000
 
 # Disclaimer
-⚠️ This project is for educational and personal privacy purposes only. 
+This project is for educational and personal privacy purposes only. 
 Use only on files you own or have permission to manipulate.
